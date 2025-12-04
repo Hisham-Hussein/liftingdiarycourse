@@ -18,6 +18,8 @@ This is a Next.js 16 application built with TypeScript, React 19, and Tailwind C
 
 - **`/docs/ui.md`** - UI coding standards (shadcn/ui components, date formatting)
 
+- **`/docs/data-fetching.md`** - Data fetching standards (Server Components, Drizzle ORM, user data isolation)
+
 **Failure to consult and follow the documentation in `/docs` before writing code is unacceptable.**
 
 All code must comply with the standards defined in the documentation files. If documentation exists for the area you're working in, it takes precedence over general best practices.
