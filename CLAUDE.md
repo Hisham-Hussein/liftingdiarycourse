@@ -6,6 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Next.js 16 application built with TypeScript, React 19, and Tailwind CSS v4 (using the new @tailwindcss/postcss plugin). The project appears to be for a "Lifting Diary Course" application, currently in its initial setup phase.
 
+## ⚠️ CRITICAL: Documentation-First Approach
+
+**BEFORE generating ANY code, you MUST:**
+
+1. **Check the `/docs` directory** for relevant documentation
+2. **Read and follow ALL guidelines** in the applicable documentation files
+3. **Strictly adhere** to the standards defined in those documents
+
+### Current Documentation Files
+
+- **`/docs/ui.md`** - UI coding standards (shadcn/ui components, date formatting)
+
+**Failure to consult and follow the documentation in `/docs` before writing code is unacceptable.**
+
+All code must comply with the standards defined in the documentation files. If documentation exists for the area you're working in, it takes precedence over general best practices.
+
 ## Development Commands
 
 ```bash
