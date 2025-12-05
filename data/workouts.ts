@@ -64,3 +64,20 @@ export async function getWorkouts() {
     },
   });
 }
+
+/**
+ * Create a new workout for the currently authenticated user
+ */
+export async function createWorkout(data: {
+  name: string;
+  date: Date;
+  notes?: string;
+  userId: string;
+}) {
+  const [workout] = await db
+    .insert(workouts)
+    .values(data)
+    .returning();
+
+  return workout;
+}
