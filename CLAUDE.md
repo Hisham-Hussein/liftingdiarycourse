@@ -20,6 +20,10 @@ This is a Next.js 16 application built with TypeScript, React 19, and Tailwind C
 
 - **`/docs/data-fetching.md`** - Data fetching standards (Server Components, Drizzle ORM, user data isolation)
 
+- **`/docs/data-mutations.md`** - Data mutation standards (Server Actions, Zod validation, data helpers)
+
+- **`/docs/auth.md`** - Authentication standards (Clerk integration, server/client patterns, protected routes)
+
 **Failure to consult and follow the documentation in `/docs` before writing code is unacceptable.**
 
 All code must comply with the standards defined in the documentation files. If documentation exists for the area you're working in, it takes precedence over general best practices.
@@ -70,37 +74,16 @@ npm run lint
 - Includes both core-web-vitals and TypeScript rules from eslint-config-next
 
 ### Authentication: Clerk
+**⚠️ See `/docs/auth.md` for complete authentication standards and patterns.**
+
+Quick reference:
 - Uses @clerk/nextjs for authentication (App Router approach)
 - Middleware: proxy.ts with `clerkMiddleware()` from @clerk/nextjs/server
 - Layout: app/layout.tsx wrapped with `<ClerkProvider>`
-- Environment variables stored in .env.local (not tracked in git):
-  - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-  - CLERK_SECRET_KEY
-- Get keys from: https://dashboard.clerk.com/last-active?path=api-keys
-
-#### Clerk Components
-- `<SignInButton>` - Triggers sign-in modal/flow
-- `<SignUpButton>` - Triggers sign-up modal/flow
-- `<UserButton>` - Shows user profile with dropdown menu
-- `<SignedIn>` - Renders children only when user is signed in
-- `<SignedOut>` - Renders children only when user is signed out
-
-#### Server-Side Auth
-When you need to access authentication data in Server Components or API routes:
-```typescript
-import { auth } from '@clerk/nextjs/server';
-
-// In Server Components or API routes
-const { userId } = await auth();
-```
-
-#### CRITICAL: Never Use Deprecated Patterns
-- ❌ DO NOT use `authMiddleware()` (deprecated - use `clerkMiddleware()`)
-- ❌ DO NOT use pages router patterns (_app.tsx, pages/signin.js)
-- ❌ DO NOT use `withAuth` or old environment variable patterns
-- ✅ ALWAYS use App Router approach with `clerkMiddleware()` in proxy.ts
-- ✅ ALWAYS import from @clerk/nextjs or @clerk/nextjs/server
-- ✅ ALWAYS use async/await with auth() method
+- Server-side: `const { userId } = await auth();`
+- Client components: `<SignedIn>`, `<SignedOut>`, `<UserButton>`
+- **Always verify auth server-side for protected data**
+- **Always scope database queries to userId**
 
 ## Project Structure
 
