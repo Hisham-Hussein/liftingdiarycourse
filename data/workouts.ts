@@ -66,6 +66,38 @@ export async function getWorkouts() {
 }
 
 /**
+ * Get a single workout by ID for the currently authenticated user
+ */
+export async function getWorkoutById(workoutId: string) {
+  const { userId } = await auth();
+  if (!userId) throw new Error('Unauthorized');
+
+  const workout = await db.query.workouts.findFirst({
+    where: and(
+      eq(workouts.id, workoutId),
+      eq(workouts.userId, userId)
+    ),
+    with: {
+      workoutExercises: {
+        orderBy: (workoutExercises, { asc }) => [asc(workoutExercises.orderIndex)],
+        with: {
+          exercise: true,
+          sets: {
+            orderBy: (sets, { asc }) => [asc(sets.setNumber)],
+          },
+        },
+      },
+    },
+  });
+
+  if (!workout) {
+    throw new Error('Workout not found or unauthorized');
+  }
+
+  return workout;
+}
+
+/**
  * Create a new workout for the currently authenticated user
  */
 export async function createWorkout(data: {
@@ -78,6 +110,34 @@ export async function createWorkout(data: {
     .insert(workouts)
     .values(data)
     .returning();
+
+  return workout;
+}
+
+/**
+ * Update a workout for the currently authenticated user
+ */
+export async function updateWorkout(data: {
+  id: string;
+  name?: string;
+  date?: Date;
+  notes?: string;
+}, userId: string) {
+  const [workout] = await db
+    .update(workouts)
+    .set({
+      ...data,
+      updatedAt: new Date(),
+    })
+    .where(and(
+      eq(workouts.id, data.id),
+      eq(workouts.userId, userId)
+    ))
+    .returning();
+
+  if (!workout) {
+    throw new Error('Workout not found or unauthorized');
+  }
 
   return workout;
 }
